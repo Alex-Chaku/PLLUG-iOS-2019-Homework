@@ -19,7 +19,7 @@ struct Book: Hashable, Comparable {
         self.name = name
         self.author = author
         self.type = type
-        self.status = .some(status: "available")
+        self.status = .added
     }
     
     func hash(into hasher: inout Hasher) {

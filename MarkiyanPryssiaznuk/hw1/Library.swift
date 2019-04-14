@@ -9,18 +9,23 @@
 import Foundation
 
 class Library {
+    private var observers: [LibraryObserver] = []
+    static let shared = Library()
+    weak var delegate: LibraryDelegate?
+    
     private var takenBooks = Set<Order>()
     private var balanceOfBooks = Set<Order>()
     
     private var historyOfTaken: [String : Order] = [:]
     private var historyOfRecieved: [String : Order] = [:]
-    
 }
 
 extension Library {
     final func addNewBook(book: Book) {
         let newOrder = Order(book: book, human: nil, date: nil)
         balanceOfBooks.insert(newOrder)
+        notify(book, bookState: .added)
+        delegate?.bookWasAdded(book: book)
         print("our new book \(newOrder.book.author) \(newOrder.book.name) \(newOrder.book.type)")
     }
     
@@ -36,7 +41,9 @@ extension Library {
                 }
             }
         }
-        newOrder.book.status = .some(status: "taken")
+        notify(book, bookState: .taken)
+        delegate?.bookWasTaken(book: book)
+        newOrder.book.status = .taken
         takenBooks.insert(newOrder)
         historyOfTaken[book.uuid] = newOrder
     }
@@ -49,8 +56,10 @@ extension Library {
                 takenBooks.remove(item)
             }
         }
+        notify(book!, bookState: .recieved)
+        delegate?.bookWasReturned(book: book!)
         balanceOfBooks.insert(newOrder)
-        newOrder.book.status = .some(status: "available")
+        newOrder.book.status = .recieved
         historyOfRecieved[book!.uuid] = newOrder
     }
 }
@@ -115,9 +124,7 @@ extension Library {
         }
     }
     
-    func printAll() {
-        print("taken ones:");printTakenBooks();print("Available ones:");printBookBalance();
-    }
+    func printAll() { print("taken ones:");printTakenBooks();print("Available ones:");printBookBalance() }
 }
 
 extension Library {
@@ -148,4 +155,77 @@ extension Library {
         }
         return sorted
     }
+}
+
+
+extension Library: Observable {
+    
+    func addObserver(_ observer: LibraryObserver) {
+        if observers.contains(where: { $0 === observer } ) == false {
+            observers.append(observer)
+        }
+    }
+    
+    func removeObserber(_ observer: LibraryObserver) {
+        if let index = observers.firstIndex(where: { $0 === observer } ) {
+            observers.remove(at: index)
+        }
+    }
+    
+    func notify(_ book: Book, bookState: BookState) {
+        observers.forEach { observer in
+            observer.notifyActionDone(book: book, bookState: bookState.rawValue)
+        }
+    }
+}
+
+protocol Observable: class {
+    
+    func addObserver(_ observer: LibraryObserver)
+    func removeObserber(_ observer: LibraryObserver)
+    func notify(_ book: Book, bookState: BookState)
+    
+}
+
+
+protocol LibraryObserver: class {
+    func notifyActionDone(book: Book, bookState: String)
+}
+
+class Libririan: LibraryObserver {
+    func notifyActionDone(book: Book, bookState: String) {
+        print("Observer: \(book) was \(bookState)")
+    }
+}
+
+protocol LibraryDelegate: class {
+    
+    func bookWasAdded(book: Book)
+    func bookWasTaken(book: Book)
+    func bookWasReturned(book: Book)
+    
+}
+
+extension Libririan: LibraryDelegate {
+    
+    func bookWasAdded(book: Book) {
+        print("Delegate: \(book) was added")
+    }
+    
+    func bookWasTaken(book: Book) {
+        print("Delegate: \(book) was taken")
+    }
+    
+    func bookWasReturned(book: Book) {
+        print("Delegate: /n name :\(book.name) status: \(book.status) was recieved")
+    }
+    
+    func listenForChanges(of library: Library? = nil) {
+        if let library = library {
+            library.delegate = self
+        } else {
+            Library.shared.delegate = self
+        }
+    }
+    
 }

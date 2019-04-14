@@ -16,8 +16,10 @@ enum BookType: String {
     case logbooks = "Logbooks"
 }
 
-enum BookState {
-    case some(status: String)
+enum BookState: String {
+    case taken = "taken"
+    case recieved = "recieved"
+    case added = "available"
 }
 
 enum filterType {
