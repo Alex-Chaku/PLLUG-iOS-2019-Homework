@@ -8,10 +8,10 @@
 
 import Foundation
 
-let book1 = Book(author: "King", type: .book, name: "Cool name")
-let book2 = Book(author: "Marshmelow", type: .fiction, name: "Awesome name")
-let book3 = Book(author: "Abs", type: .jornal, name: "Unbelivable name")
-let book4 = Book(author: "Lolka", type: .dictionary, name: "Gorgeous name")
+let book1 = Book(author: "Kidryk", type: .book, name: "Bot")
+let book2 = Book(author: "Paolini", type: .fiction, name: "Eragon")
+let book3 = Book(author: "some author", type: .jornal, name: "Men's health")
+let book4 = Book(author: "Paul", type: .dictionary, name: "Pro swift")
 
 let human1 = Human(name: "Markiayn", surname: "Pryssiaznuk")
 let human2 = Human(name: "Ivan", surname: "Pryssiaznuk")
@@ -77,11 +77,7 @@ do {
 //
 //print("-------------------------------------- Sorted by type: --------------------------------------")
 //print()
-//for item in library.sort(sort: .byType, filter: .available) {
-//    let book = item.book
-//    let human = item.human ?? nil
-//    let date = item.date ?? nil
-//    print("book with id: was taken his author: \(book.author) | \n name: \(book.name) | \n status: \(book.status) | \n type: \(book.type) | \n it was \(book.status) at: \(String(describing: date)) | \n by: \(String(describing: human?.name)) | \n passport: \(String(describing: human?.passport))")
-//}
+//library.sort(sort: .byType, filter: .available)
+
 
 libririan.listenForChanges(of: library)

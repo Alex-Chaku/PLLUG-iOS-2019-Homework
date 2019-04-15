@@ -26,20 +26,17 @@ extension Library {
         balanceOfBooks.insert(newOrder)
         notify(book, bookState: .added)
         delegate?.bookWasAdded(book: book)
-        print("our new book \(newOrder.book.author) \(newOrder.book.name) \(newOrder.book.type)")
+//        print("our new book \(newOrder.book.author) \(newOrder.book.name) \(newOrder.book.type)")
     }
     
     final func takeBook(book: Book, human: Human) throws {
         var newOrder = Order(book: book, human: human, date: Date())
+//        let filteredNames = peopleArray.filter( {$0.age > 18 }).map({ return $0.name })
         if balanceOfBooks.isEmpty {
             print("Book balance is empty")
             throw booksError.someError(error: "Balance of books aren't good")
         } else {
-            for item in balanceOfBooks {
-                if newOrder.book.uuid.hashValue == item.book.uuid.hashValue {
-                    balanceOfBooks.remove(item)
-                }
-            }
+            _ = balanceOfBooks.filter( { $0.book.uuid.hashValue == newOrder.book.uuid.hashValue }).map( { balanceOfBooks.remove($0)})
         }
         notify(book, bookState: .taken)
         delegate?.bookWasTaken(book: book)
@@ -51,11 +48,7 @@ extension Library {
     final func recieveBook(book: Book? , human: Human) throws {
         guard let newBook = book else { throw booksError.someError(error: "Book is nil") }
         var newOrder = Order(book: newBook, human: human, date: Date())
-        for item in takenBooks {
-            if newOrder.book.uuid.hashValue == item.book.uuid.hashValue {
-                takenBooks.remove(item)
-            }
-        }
+        _ = takenBooks.filter( { $0.book.uuid.hashValue == newOrder.book.uuid.hashValue }).map( { takenBooks.remove($0)})
         notify(book!, bookState: .recieved)
         delegate?.bookWasReturned(book: book!)
         balanceOfBooks.insert(newOrder)
@@ -79,10 +72,10 @@ extension Library {
 
 extension Library {
     func printTakenBooks() {
-        for item in takenBooks {
-            let book = item.book
-            guard let human = item.human else { return }
-            guard let date = item.date else { return }
+       _ = takenBooks.map {
+            let book = $0.book
+            guard let human = $0.human else { return }
+            guard let date = $0.date else { return }
             
             print("book with id: \(book.uuid) was taken his author: \(book.author) | \n name: \(book.name) | \n status: \(book.status) | \n type: \(book.type) | \n it was \(book.status) at: \(date) | \n by: \(human.name) | \n passport: \(human.passport)")
         }
@@ -128,7 +121,7 @@ extension Library {
 }
 
 extension Library {
-    func sort(sort: sortType, filter: filterType) -> [Order] {
+    func sort(sort: sortType, filter: filterType) {
         var array: [Order] = []
         var sorted: [Order] = []
         
@@ -153,7 +146,13 @@ extension Library {
         case .byHuman:
             sorted = array.sorted{ $0.human!.passport < $1.human!.passport }
         }
-        return sorted
+        
+        sorted.forEach { (item) in
+                let book = item.book
+                let human = item.human
+                let date = item.date
+            print("book with id: was taken his author: \(book.author) | \n name: \(book.name) | \n status: \(book.status) | \n type: \(book.type) | \n it was \(book.status) at: \(String(describing: date)) | \n by: \(String(describing: human?.name)) | \n passport: \(String(describing: human?.passport))")
+        }
     }
 }
 
