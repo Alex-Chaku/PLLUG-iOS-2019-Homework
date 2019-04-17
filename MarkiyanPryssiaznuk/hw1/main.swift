@@ -21,9 +21,9 @@ let library = Library()
 let libririan = Libririan()
 
 library.addObserver(libririan)
+libririan.listenForChanges(of: library)
 
-//print("-------------------------------------- Created books --------------------------------------")
-//print()
+print()
 
 library.addNewBook(book: book1)
 library.addNewBook(book: book2)
@@ -33,7 +33,7 @@ library.addNewBook(book: book4)
 //print()
 //print("-------------------------------------- Added books --------------------------------------")
 //print()
-//
+
 //library.printBookBalance()
 
 do {
@@ -64,7 +64,7 @@ do {
 //print()
 //
 //library.printBookBalance()
-
+//
 //print()
 //print("-------------------------------------- History of book --------------------------------------")
 //print()
@@ -79,5 +79,3 @@ do {
 //print()
 //library.sort(sort: .byType, filter: .available)
 
-
-libririan.listenForChanges(of: library)

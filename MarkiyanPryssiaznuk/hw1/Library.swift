@@ -179,13 +179,10 @@ extension Library: Observable {
 }
 
 protocol Observable: class {
-    
     func addObserver(_ observer: LibraryObserver)
     func removeObserber(_ observer: LibraryObserver)
     func notify(_ book: Book, bookState: BookState)
-    
 }
-
 
 protocol LibraryObserver: class {
     func notifyActionDone(book: Book, bookState: String)
@@ -193,30 +190,28 @@ protocol LibraryObserver: class {
 
 class Libririan: LibraryObserver {
     func notifyActionDone(book: Book, bookState: String) {
-        print("Observer: \(book) was \(bookState)")
+        print("Observer: \(book.name) was \(bookState)")
     }
 }
 
 protocol LibraryDelegate: class {
-    
     func bookWasAdded(book: Book)
     func bookWasTaken(book: Book)
     func bookWasReturned(book: Book)
-    
 }
 
 extension Libririan: LibraryDelegate {
     
     func bookWasAdded(book: Book) {
-        print("Delegate: \(book) was added")
+        print("Delegate: \(book.name) was added")
     }
     
     func bookWasTaken(book: Book) {
-        print("Delegate: \(book) was taken")
+        print("Delegate: \(book.name) was taken")
     }
     
     func bookWasReturned(book: Book) {
-        print("Delegate: /n name :\(book.name) status: \(book.status) was recieved")
+        print("Delegate: \(book.name) was recieved")
     }
     
     func listenForChanges(of library: Library? = nil) {
