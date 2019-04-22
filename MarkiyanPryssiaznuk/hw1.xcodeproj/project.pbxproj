@@ -13,6 +13,7 @@
 		765DCCBB225F782C00956184 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DCCBA225F782C00956184 /* Order.swift */; };
 		765DCCBD225F784000956184 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765DCCBC225F784000956184 /* Enums.swift */; };
 		76A3AA8322454DDC00645FD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A3AA8222454DDC00645FD7 /* main.swift */; };
+		76B04B0B226A647700A5BD91 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B04B0A226A647700A5BD91 /* FileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +36,7 @@
 		765DCCBC225F784000956184 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		76A3AA7F22454DDC00645FD7 /* hw1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hw1; sourceTree = BUILT_PRODUCTS_DIR; };
 		76A3AA8222454DDC00645FD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		76B04B0A226A647700A5BD91 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				765DCCB6225F77C300956184 /* Human.swift */,
 				765DCCB8225F77E900956184 /* Library.swift */,
 				765DCCBA225F782C00956184 /* Order.swift */,
+				76B04B0A226A647700A5BD91 /* FileManager.swift */,
 			);
 			path = hw1;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 				765DCCB5225F77BB00956184 /* Book.swift in Sources */,
 				765DCCB9225F77E900956184 /* Library.swift in Sources */,
 				765DCCBB225F782C00956184 /* Order.swift in Sources */,
+				76B04B0B226A647700A5BD91 /* FileManager.swift in Sources */,
 				765DCCB7225F77C300956184 /* Human.swift in Sources */,
 				765DCCBD225F784000956184 /* Enums.swift in Sources */,
 				76A3AA8322454DDC00645FD7 /* main.swift in Sources */,

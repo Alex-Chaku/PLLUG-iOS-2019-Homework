@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum BookType: String {
+enum BookType: String, Encodable, Decodable {
     case jornal = "Journal"
     case book = "Book"
     case fiction = "Fiction"
@@ -16,10 +16,10 @@ enum BookType: String {
     case logbooks = "Logbooks"
 }
 
-enum BookState: String {
+enum BookState: String, Encodable, Decodable {
     case taken = "taken"
     case recieved = "recieved"
-    case added = "available"
+    case added = "added"
 }
 
 enum filterType {

@@ -18,10 +18,10 @@ let human2 = Human(name: "Ivan", surname: "Pryssiaznuk")
 
 let library = Library()
 
-let libririan = Libririan()
-
-library.addObserver(libririan)
-libririan.listenForChanges(of: library)
+//let libririan = Libririan()
+//
+//library.addObserver(libririan)
+//libririan.listenForChanges(of: library)
 
 print()
 
@@ -30,11 +30,11 @@ library.addNewBook(book: book2)
 library.addNewBook(book: book3)
 library.addNewBook(book: book4)
 
-//print()
-//print("-------------------------------------- Added books --------------------------------------")
-//print()
+print()
+print("-------------------------------------- Added books --------------------------------------")
+print()
 
-//library.printBookBalance()
+library.printBookBalance()
 
 do {
     try library.takeBook(book: book1, human: human1)
@@ -42,15 +42,15 @@ do {
     try library.takeBook(book: book3, human: human2)
 } catch booksError.someError(error: "Balance of books aren't good") { }
 
-//print()
-//print("-------------------------------------- Taken books: --------------------------------------")
-//print()
-//library.printTakenBooks()
+print()
+print("-------------------------------------- Taken books: --------------------------------------")
+print()
+library.printTakenBooks()
 
-//print()
-//print("-------------------------------------- now available: --------------------------------------")
-//library.printBookBalance()
-//print()
+print()
+print("-------------------------------------- now available: --------------------------------------")
+library.printBookBalance()
+print()
 
 do {
     try library.recieveBook(book: book1, human: human1)
@@ -59,23 +59,23 @@ do {
 
 } catch booksError.someError(error: "Book is nil") { }
 
-//print()
-//print("-------------------------------------- Recived books --------------------------------------")
-//print()
-//
-//library.printBookBalance()
-//
-//print()
-//print("-------------------------------------- History of book --------------------------------------")
-//print()
-//library.printHistoryOfBook(book: book1)
-//
-//print()
-//print("-------------------------------------- ALL books --------------------------------------")
-//print()
-//library.printAll()
-//
-//print("-------------------------------------- Sorted by type: --------------------------------------")
-//print()
-//library.sort(sort: .byType, filter: .available)
+print()
+print("-------------------------------------- Recived books --------------------------------------")
+print()
+
+library.printBookBalance()
+
+print()
+print("-------------------------------------- History of book --------------------------------------")
+print()
+library.printHistoryOfBook(book: book1)
+
+print()
+print("-------------------------------------- ALL books --------------------------------------")
+print()
+library.printAll()
+
+print("-------------------------------------- Sorted by type: --------------------------------------")
+print()
+library.sort(sort: .byType, filter: .available)
 

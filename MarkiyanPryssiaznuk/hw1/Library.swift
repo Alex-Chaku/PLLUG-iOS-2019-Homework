@@ -9,15 +9,25 @@
 import Foundation
 
 class Library {
+    
+    private enum Key: String, StorageKey {
+        var key: String {
+            return self.rawValue
+        }
+        case books
+    }
+    
+    private var completionHandler: [(() -> (Void), BookState)] = []
+    
     private var observers: [LibraryObserver] = []
     static let shared = Library()
     weak var delegate: LibraryDelegate?
     
-    private var takenBooks = Set<Order>()
-    private var balanceOfBooks = Set<Order>()
+    fileprivate var takenBooks = Set<Order>()
+    fileprivate var balanceOfBooks = Set<Order>()
     
-    private var historyOfTaken: [String : Order] = [:]
-    private var historyOfRecieved: [String : Order] = [:]
+    fileprivate var historyOfTaken: [String : Order] = [:]
+    fileprivate var historyOfRecieved: [String : Order] = [:]
 }
 
 extension Library {
@@ -26,12 +36,13 @@ extension Library {
         balanceOfBooks.insert(newOrder)
         notify(book, bookState: .added)
         delegate?.bookWasAdded(book: book)
-//        print("our new book \(newOrder.book.author) \(newOrder.book.name) \(newOrder.book.type)")
+        do { try StorageManager.shared.set(value: balanceOfBooks, key: Key.books) } catch {
+            print(error)
+        }
     }
     
     final func takeBook(book: Book, human: Human) throws {
-        var newOrder = Order(book: book, human: human, date: Date())
-//        let filteredNames = peopleArray.filter( {$0.age > 18 }).map({ return $0.name })
+        let newOrder = Order(book: book, human: human, date: Date())
         if balanceOfBooks.isEmpty {
             print("Book balance is empty")
             throw booksError.someError(error: "Balance of books aren't good")
@@ -47,7 +58,7 @@ extension Library {
     
     final func recieveBook(book: Book? , human: Human) throws {
         guard let newBook = book else { throw booksError.someError(error: "Book is nil") }
-        var newOrder = Order(book: newBook, human: human, date: Date())
+        let newOrder = Order(book: newBook, human: human, date: Date())
         _ = takenBooks.filter( { $0.book.uuid.hashValue == newOrder.book.uuid.hashValue }).map( { takenBooks.remove($0)})
         notify(book!, bookState: .recieved)
         delegate?.bookWasReturned(book: book!)
@@ -117,7 +128,11 @@ extension Library {
         }
     }
     
-    func printAll() { print("taken ones:");printTakenBooks();print("Available ones:");printBookBalance() }
+    func printAll() {
+        print("taken ones:")
+        printTakenBooks()
+        print("Available ones:")
+        printBookBalance() }
 }
 
 extension Library {
@@ -173,7 +188,7 @@ extension Library: Observable {
     
     func notify(_ book: Book, bookState: BookState) {
         observers.forEach { observer in
-            observer.notifyActionDone(book: book, bookState: bookState.rawValue)
+            observer.notifyFinished(book: book, bookState: bookState.rawValue)
         }
     }
 }
@@ -185,11 +200,11 @@ protocol Observable: class {
 }
 
 protocol LibraryObserver: class {
-    func notifyActionDone(book: Book, bookState: String)
+    func notifyFinished(book: Book, bookState: String)
 }
 
 class Libririan: LibraryObserver {
-    func notifyActionDone(book: Book, bookState: String) {
+    func notifyFinished(book: Book, bookState: String) {
         print("Observer: \(book.name) was \(bookState)")
     }
 }
@@ -222,4 +237,11 @@ extension Libririan: LibraryDelegate {
         }
     }
     
+}
+
+
+extension FileManager {
+    static var documentDirectoryURL: URL {
+        return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
 }
