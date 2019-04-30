@@ -16,12 +16,25 @@ var book1 = Book(title: "The Great Gatsby", author: "Scott Fitzgerald", type: .b
 var book2 = Book(title: "To Kill a Mockingbird", author: "Harper Lee", type: .book)
 
 do {
+    library.booksInLibrary = try library.getStoredBooks()
+} catch {
+    print(error.localizedDescription)
+}
+
+var test = [History]()
+do {
+    library.history = try library.getSroredHistory()
+} catch {
+    print(error)
+}
+
+
+do {
     try library.addBook(book1)
     try library.addBook(book2)
 } catch {
     print(error.localizedDescription)
 }
-
 do{
     try library.giveBook(book1, to: person1)
     try library.giveBook(book2, to: person1)
@@ -50,16 +63,9 @@ print("\nHistory of book1")
 library.historyOfBook(book1)
 print("\nHistory of book2")
 library.historyOfBook(book2)
-do {
-    library.booksInLibrary = try library.getStoredBooksFromUserDefaults()
-} catch {
-    print(error)
-}
-do {
-    library.booksInLibrary = try library.getSroredBooksFromFile()
-} catch {
-    print(error)
-}
+
+try library.export(with: .title)
+
 
 do {
     library.booksInLibrary = try library.removeBooksFromUserDefaults()
@@ -67,7 +73,7 @@ do {
     print(error)
 }
 do {
-    library.booksInLibrary = try library.removeBooksFromFile()
+  library.history = try library.removeHistoryFromFile()
 } catch {
     print(error)
 }

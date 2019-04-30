@@ -11,7 +11,7 @@ import Foundation
 
 
 
-typealias History = (book: Book, person: Person, giveDate: Date, returnDate: Date?)
+//typealias History = (book: Book, person: Person, giveDate: Date, returnDate: Date?)
 
 func notify(_ completion: ()->()) {
     completion()
@@ -28,45 +28,57 @@ class Library {
             return self.rawValue
         }
         case books
+        case history
     }
     
-    var booksInLibrary = [Book]() {
-        didSet {
-            
-        }
-    }
+    var booksInLibrary = [Book]()
+    
     var history = [History]()
     
     func addBook(_ book: Book) throws {
         booksInLibrary.append(book)
-        try LocalStorageManager.shared.set(value: booksInLibrary, key: Key.books)
         try UserDefaultsStorageManager.shared.set(value: booksInLibrary, key: Key.books)
         notify {
             print("Added \(book.type): '\(book.title)' \(book.author)")
         }
     }
     
-    func getStoredBooksFromUserDefaults() throws -> [Book] {
+    func getStoredBooks() throws -> [Book] {
         return try UserDefaultsStorageManager.shared.get(key: Key.books)
     }
     
-    func getSroredBooksFromFile() throws -> [Book] {
-        return try LocalStorageManager.shared.get(key: Key.books)
+    func getSroredHistory() throws -> [History] {
+        return try LocalStorageManager.shared.get(key: Key.history)
     }
     
     func removeBooksFromUserDefaults() throws -> [Book] {
         return try UserDefaultsStorageManager.shared.remove(key: Key.books)
     }
     
-    func removeBooksFromFile() throws -> [Book] {
-        return try LocalStorageManager.shared.remove(key: Key.books)
+    func removeHistoryFromFile() throws -> [History] {
+        return try LocalStorageManager.shared.remove(key: Key.history)
+    }
+    
+    func export(with filter: SortType) throws {
+        switch filter {
+        case .person:
+            history.sort { $0.person.surname < $1.person.surname }
+        case .date:
+            history.sort { $0.giveDate > $1.giveDate }
+        case .title:
+            history.sort { $0.book.title < $1.book.title }
+        case .author:
+            history.sort { $0.book.author < $1.book.author}
+        }
+        try LocalStorageManager.shared.set(value: history, key: Key.history)
     }
     
     func giveBook(_ book: Book, to person: Person) throws {
         guard let index = booksInLibrary.firstIndex(where: {$0.uuid == book.uuid}) else { throw libraryErrors.wrongBook }
         book.isAvailable = false
-        history.insert((book.copy(), person, Date(), nil), at: 0)
+        history.insert(History(book: book.copy(), person: person, giveDate: Date(), returnDate: nil), at: 0)
         booksInLibrary[index].isAvailable =  false
+        try LocalStorageManager.shared.set(value: history, key: Key.history)
         notify {
              print("\(book.type): '\(book.title)' \(book.author) has given to \(person.name) \(person.surname)")
         }
@@ -78,6 +90,7 @@ class Library {
         history[indexInHistory].returnDate = Date()
         history[indexInHistory].book.isAvailable = true
         booksInLibrary[indexInBooks].isAvailable = true
+        try LocalStorageManager.shared.set(value: history, key: Key.history)
         notify {
             print("\(book.type): '\(book.title)' \(book.author) was returned")
         }

@@ -12,6 +12,7 @@
 		C08D9443227868DB00E530B3 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D9442227868DB00E530B3 /* Person.swift */; };
 		C08D9445227868FA00E530B3 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D9444227868FA00E530B3 /* Library.swift */; };
 		C08D944722786BBD00E530B3 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D944622786BBD00E530B3 /* StorageManager.swift */; };
+		C08D944B22788D2700E530B3 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D944A22788D2700E530B3 /* History.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,7 @@
 		C08D9442227868DB00E530B3 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		C08D9444227868FA00E530B3 /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		C08D944622786BBD00E530B3 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		C08D944A22788D2700E530B3 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				C08D9442227868DB00E530B3 /* Person.swift */,
 				C08D9444227868FA00E530B3 /* Library.swift */,
 				C08D944622786BBD00E530B3 /* StorageManager.swift */,
+				C08D944A22788D2700E530B3 /* History.swift */,
 			);
 			path = "hw-library+closure+storage";
 			sourceTree = "<group>";
@@ -131,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C08D944B22788D2700E530B3 /* History.swift in Sources */,
 				C08D9443227868DB00E530B3 /* Person.swift in Sources */,
 				C08D9445227868FA00E530B3 /* Library.swift in Sources */,
 				C08D944722786BBD00E530B3 /* StorageManager.swift in Sources */,
