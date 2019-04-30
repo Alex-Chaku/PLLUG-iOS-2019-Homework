@@ -9,8 +9,7 @@
 import Foundation
 
 class Library {
-    
-    private enum Key: String, StorageKey {
+     public enum Key: String, StorageKey {
         var key: String {
             return self.rawValue
         }
@@ -25,9 +24,31 @@ class Library {
     
     fileprivate var takenBooks = Set<Order>()
     fileprivate var balanceOfBooks = Set<Order>()
-    
+
     fileprivate var historyOfTaken: [String : Order] = [:]
     fileprivate var historyOfRecieved: [String : Order] = [:]
+    
+    private let export = Export()
+    
+    func syncronize() throws {
+        if balanceOfBooks.isEmpty {
+            let removedBooks: [Order] = try StorageManager.shared.remove(key: Key.books)
+            print("Storage was syncronazed & removed those items")
+            print()
+            removedBooks.forEach { (order) in
+                print(order.book.name)
+            }
+        } else {
+            _ = try StorageManager.shared.set(value: balanceOfBooks, key: Key.books)
+            print("Storage was syncronazed & seted our books")
+        }
+    }
+}
+
+extension Library {
+    func getStoredBooks() throws -> Set<Order> {
+        return try StorageManager.shared.get(key: Key.books)
+    }
 }
 
 extension Library {
@@ -36,13 +57,15 @@ extension Library {
         balanceOfBooks.insert(newOrder)
         notify(book, bookState: .added)
         delegate?.bookWasAdded(book: book)
-        do { try StorageManager.shared.set(value: balanceOfBooks, key: Key.books) } catch {
+        do {
+            try StorageManager.shared.set(value: balanceOfBooks, key: Key.books)
+        } catch {
             print(error)
         }
     }
     
     final func takeBook(book: Book, human: Human) throws {
-        let newOrder = Order(book: book, human: human, date: Date())
+        var newOrder = Order(book: book, human: human, date: Date())
         if balanceOfBooks.isEmpty {
             print("Book balance is empty")
             throw booksError.someError(error: "Balance of books aren't good")
@@ -58,7 +81,7 @@ extension Library {
     
     final func recieveBook(book: Book? , human: Human) throws {
         guard let newBook = book else { throw booksError.someError(error: "Book is nil") }
-        let newOrder = Order(book: newBook, human: human, date: Date())
+        var newOrder = Order(book: newBook, human: human, date: Date())
         _ = takenBooks.filter( { $0.book.uuid.hashValue == newOrder.book.uuid.hashValue }).map( { takenBooks.remove($0)})
         notify(book!, bookState: .recieved)
         delegate?.bookWasReturned(book: book!)
@@ -94,7 +117,7 @@ extension Library {
     
     func printHistoryOfBook(book: Book) {
         let calendar = Calendar.current
-        
+        var generalSet : [Order] = []
         for (key, value) in historyOfTaken {
             let dictBook = value.book
             guard let human = value.human else { return }
@@ -102,7 +125,11 @@ extension Library {
             if value.book.uuid == book.uuid {
                 guard let dateFrom = value.date else { return }
                 let components = calendar.dateComponents([.day], from: dateFrom, to: Date())
-                print("book with id: \(key) has history  author: \(dictBook.author) | \n name: \(dictBook.name) | \n status: \(dictBook.status) | \n type: \(dictBook.type) | \n it was \(dictBook.status) at: \(date) to \(components) | \n by: \(human.name)  | \n passport: \(human.passport)")
+                
+                let finalstring = "book with id: \(key) has history  author: \(dictBook.author) | \n name: \(dictBook.name) | \n status: \(dictBook.status) | \n type: \(dictBook.type) | \n it was \(dictBook.status) at: \(date) to \(components) | \n by: \(human.name)  | \n passport: \(human.passport)"
+                
+                generalSet.append(value)
+                print(finalstring)
             }
         }
         
@@ -113,9 +140,18 @@ extension Library {
             if value.book.uuid == book.uuid {
                 guard let dateFrom = value.date else { return }
                 let components = calendar.dateComponents([.day], from: dateFrom, to: Date())
-                print("book with id: \(key) has history  author: \(dictBook.author) | \n name: \(dictBook.name) | \n status: \(dictBook.status) | \n type: \(dictBook.type) | \n it was \(dictBook.status) at: \(date) to \(components) | \n by: \(human.name)  | \n passport: \(human.passport)")
+                
+                let finalstring = "book with id: \(key) has history  author: \(dictBook.author) | \n name: \(dictBook.name) | \n status: \(dictBook.status) | \n type: \(dictBook.type) | \n it was \(dictBook.status) at: \(date) to \(components) | \n by: \(human.name)  | \n passport: \(human.passport)"
+            
+                generalSet.append(value)
+                print(finalstring)
             }
         }
+        var name: String = ""
+        generalSet.forEach { (order) in
+            name = order.book.name
+        }
+        do { try export.save(orders: generalSet, fileName: name) } catch { print(error) }
     }
     
     func printBookBalance() {
@@ -168,12 +204,14 @@ extension Library {
                 let date = item.date
             print("book with id: was taken his author: \(book.author) | \n name: \(book.name) | \n status: \(book.status) | \n type: \(book.type) | \n it was \(book.status) at: \(String(describing: date)) | \n by: \(String(describing: human?.name)) | \n passport: \(String(describing: human?.passport))")
         }
+        
+        do { try export.save(orders: sorted, fileName: "Sorted Books") } catch { print(error) }
+
     }
 }
 
 
 extension Library: Observable {
-    
     func addObserver(_ observer: LibraryObserver) {
         if observers.contains(where: { $0 === observer } ) == false {
             observers.append(observer)
@@ -188,7 +226,9 @@ extension Library: Observable {
     
     func notify(_ book: Book, bookState: BookState) {
         observers.forEach { observer in
-            observer.notifyFinished(book: book, bookState: bookState.rawValue)
+            observer.notifyEnd {
+                print("Observer: \(book.name) was \(bookState)")
+            }
         }
     }
 }
@@ -200,12 +240,12 @@ protocol Observable: class {
 }
 
 protocol LibraryObserver: class {
-    func notifyFinished(book: Book, bookState: String)
+    func notifyEnd(_: () -> ())
 }
 
 class Libririan: LibraryObserver {
-    func notifyFinished(book: Book, bookState: String) {
-        print("Observer: \(book.name) was \(bookState)")
+    func notifyEnd(_ completion: () -> ()) {
+        completion()
     }
 }
 
@@ -237,11 +277,4 @@ extension Libririan: LibraryDelegate {
         }
     }
     
-}
-
-
-extension FileManager {
-    static var documentDirectoryURL: URL {
-        return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
-    }
 }

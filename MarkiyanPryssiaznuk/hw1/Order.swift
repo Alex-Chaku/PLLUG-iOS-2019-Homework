@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Order: Hashable, Codable {
+struct Order: Hashable, Codable {
     var book: Book
     var human: Human?
     var date: Date?
@@ -23,20 +23,6 @@ class Order: Hashable, Codable {
         return lhs.book == rhs.book && lhs.date == rhs.date && lhs.human == rhs.human
     }
     
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        book = try container.decode(Book.self, forKey: .book)
-        human = try container.decode(Human.self, forKey: .human)
-        date = try container.decode(Date.self, forKey: .date)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(book, forKey: .book)
-        try container.encode(human!, forKey: .human)
-        try container.encode(date, forKey: .date)
-    }
-
     
     init(book: Book, human: Human?, date: Date?) {
         self.book = book

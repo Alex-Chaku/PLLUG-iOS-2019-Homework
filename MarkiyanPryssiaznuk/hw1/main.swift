@@ -18,12 +18,17 @@ let human2 = Human(name: "Ivan", surname: "Pryssiaznuk")
 
 let library = Library()
 
+
 //let libririan = Libririan()
 //
 //library.addObserver(libririan)
 //libririan.listenForChanges(of: library)
 
-print()
+do {
+    _ = try library.syncronize()
+} catch {
+    print(error)
+}
 
 library.addNewBook(book: book1)
 library.addNewBook(book: book2)
@@ -78,4 +83,27 @@ library.printAll()
 print("-------------------------------------- Sorted by type: --------------------------------------")
 print()
 library.sort(sort: .byType, filter: .available)
+
+print()
+print()
+print()
+do {
+    let storagedBooks = try library.getStoredBooks()
+    for book in storagedBooks {
+        print(book)
+    }
+    print("-------------------------------------- Get Info from selected file : --------------------------------------")
+    let export = Export()
+    let ourData = try export.get(fileName: "Bot")
+    print(ourData!)
+} catch {
+    print(error)
+}
+
+
+do {
+    _ = try library.syncronize()
+} catch {
+    print(error)
+}
 

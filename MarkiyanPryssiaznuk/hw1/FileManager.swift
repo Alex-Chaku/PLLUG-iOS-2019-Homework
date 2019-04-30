@@ -8,63 +8,84 @@
 
 import Foundation
 
-//class Export {
-//    func save(directory: FileManager.SearchPathDirectory) throws {
-//        let kindDirectoryURL = URL(
-//            fileURLWithPath: kind.rawValue,
-//            relativeTo: FileManager.default.urls(for: directory, in: .userDomainMask)[0]
-//        )
-//
-//}
-//
-//extension FileManager {
-//    static var documentDirectoryURL: URL {
-//        return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//    }
-//}
+class Export {
+    func save(orders: [Order], fileName: String) throws {
+        do {
+            for item in orders {
+                let jsonURL = URL(
+                    fileURLWithPath: fileName,
+                    relativeTo: FileManager.documentDirectoryURL.appendingPathComponent(item.book.type.rawValue)
+                    ).appendingPathExtension("json")
+                let jsonEncoder = JSONEncoder()
+                jsonEncoder.outputFormatting = .prettyPrinted
+                let jsonData = try jsonEncoder.encode(orders)
+                try jsonData.write(to: jsonURL)
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func get(fileName: String) throws -> String? {
+        let jsonURL = URL(
+            fileURLWithPath: fileName,
+            relativeTo: FileManager.documentDirectoryURL.appendingPathComponent(fileName)
+            ).appendingPathExtension("json")
+    
+        let savedData = try Data(contentsOf: jsonURL)
+        let stringData = String(data: savedData, encoding: .utf8)
 
-//
+        return stringData
+    }
+}
+
+extension FileManager {
+    static var documentDirectoryURL: URL {
+        return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+}
+
 protocol StorageKey {
     var key: String { get }
 }
-//
+
 struct Failure: Error {
     let code: Int?
     let description: String
 }
-//
+
 struct Fail: Error {
     struct StorageFailure: Error {
         static let notFound = Failure(code: nil, description: "Object is not available")
         static let notDecoded = Failure(code: nil, description: "Object can't be decoded")
     }
 }
-//
+
 protocol StorageProtocol {
     func set<T: Encodable>(value: T, key: StorageKey) throws
     func get<T: Decodable>(key: StorageKey) throws -> T
     func remove<T: Decodable>(key: StorageKey) throws -> T
 }
-//
+
 class StorageManager: StorageProtocol {
     static let shared = StorageManager()
     private var storage: StorageProtocol = UserDefaultsStorageManager()
     
     private init() {}
     
-    func set<T>(value: T, key: StorageKey) throws where T : Encodable {
+    final func set<T>(value: T, key: StorageKey) throws where T : Encodable {
         try storage.set(value: value, key: key)
     }
     
-    func get<T>(key: StorageKey) throws -> T where T : Decodable {
+    final func get<T>(key: StorageKey) throws -> T where T : Decodable {
         return try storage.get(key: key)
     }
     
-    func remove<T>(key: StorageKey) throws -> T where T : Decodable {
+    final func remove<T>(key: StorageKey) throws -> T where T : Decodable {
         return try storage.remove(key: key)
     }
 }
-//
+
 class RemoteStorageManager: StorageProtocol {
     func set<T>(value: T, key: StorageKey) throws where T : Encodable {
         assertionFailure("Implement this")
@@ -104,39 +125,3 @@ class UserDefaultsStorageManager: StorageProtocol {
         return object
     }
 }
-//
-//class Book: Codable {
-//    let id = UUID().uuidString
-//    let title: String
-//    let author: String
-//    
-//    init(title: String, author: String) {
-//        self.title = title
-//        self.author = author
-//    }
-//}
-//
-//class Library {
-
-//
-//    var books = [Book]()
-//    
-//    func add(book: Book) throws {
-//        books.append(book)
-//        try StorageManager.shared.set(value: books, key: Key.books)
-//    }
-//    
-//    func getStoredBooks() throws -> [Book] {
-//        return try StorageManager.shared.get(key: Key.books) as [Book]
-//    }
-//}
-//
-//let book = Book(title: "Lolka", author: "Bohdan")
-//let library = Library()
-//do {
-//    try library.add(book: book)
-//    let some = try library.getStoredBooks()
-//    print(some[0].title)
-//} catch {
-//}
-
