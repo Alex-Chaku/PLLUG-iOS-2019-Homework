@@ -68,7 +68,7 @@ extension Library {
         var newOrder = Order(book: book, human: human, date: Date())
         if balanceOfBooks.isEmpty {
             print("Book balance is empty")
-            throw booksError.someError(error: "Balance of books aren't good")
+            throw BooksError.someError(error: "Balance of books aren't good")
         } else {
             _ = balanceOfBooks.filter( { $0.book.uuid.hashValue == newOrder.book.uuid.hashValue }).map( { balanceOfBooks.remove($0)})
         }
@@ -80,7 +80,7 @@ extension Library {
     }
     
     final func recieveBook(book: Book? , human: Human) throws {
-        guard let newBook = book else { throw booksError.someError(error: "Book is nil") }
+        guard let newBook = book else { throw BooksError.someError(error: "Book is nil") }
         var newOrder = Order(book: newBook, human: human, date: Date())
         _ = takenBooks.filter( { $0.book.uuid.hashValue == newOrder.book.uuid.hashValue }).map( { takenBooks.remove($0)})
         notify(book!, bookState: .recieved)
@@ -92,7 +92,7 @@ extension Library {
 }
 
 extension Library {
-    final func filer(filet: filterType) {
+    final func filer(filet: FilterType) {
         switch filet {
         case .available:
             print(balanceOfBooks)
@@ -172,7 +172,7 @@ extension Library {
 }
 
 extension Library {
-    func sort(sort: sortType, filter: filterType) {
+    func sort(sort: SortType, filter: FilterType) {
         var array: [Order] = []
         var sorted: [Order] = []
         
@@ -205,8 +205,7 @@ extension Library {
             print("book with id: was taken his author: \(book.author) | \n name: \(book.name) | \n status: \(book.status) | \n type: \(book.type) | \n it was \(book.status) at: \(String(describing: date)) | \n by: \(String(describing: human?.name)) | \n passport: \(String(describing: human?.passport))")
         }
         
-        do { try export.save(orders: sorted, fileName: "Sorted Books") } catch { print(error) }
-
+        do { try export.save(orders: sorted, fileName: "Sorted") } catch { print(error) }
     }
 }
 

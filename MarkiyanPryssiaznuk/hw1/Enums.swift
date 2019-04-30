@@ -22,17 +22,17 @@ enum BookState: String, Encodable, Decodable {
     case added = "added"
 }
 
-enum filterType {
+enum FilterType {
     case available
     case taken
     case all
 }
 
-enum booksError: Error {
+enum BooksError: Error {
     case someError(error: String)
 }
 
-enum sortType {
+enum SortType {
     case byName
     case byAuthor
     case byType

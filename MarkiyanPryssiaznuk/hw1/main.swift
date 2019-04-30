@@ -45,7 +45,7 @@ do {
     try library.takeBook(book: book1, human: human1)
     try library.takeBook(book: book2, human: human1)
     try library.takeBook(book: book3, human: human2)
-} catch booksError.someError(error: "Balance of books aren't good") { }
+} catch BooksError.someError(error: "Balance of books aren't good") { }
 
 print()
 print("-------------------------------------- Taken books: --------------------------------------")
@@ -62,7 +62,7 @@ do {
     try library.recieveBook(book: book2, human: human1)
     try library.recieveBook(book: book3, human: human1)
 
-} catch booksError.someError(error: "Book is nil") { }
+} catch BooksError.someError(error: "Book is nil") { }
 
 print()
 print("-------------------------------------- Recived books --------------------------------------")
@@ -82,7 +82,7 @@ library.printAll()
 
 print("-------------------------------------- Sorted by type: --------------------------------------")
 print()
-library.sort(sort: .byType, filter: .available)
+_ = library.sort(sort: .byName, filter: .available)
 
 print()
 print()
@@ -99,6 +99,14 @@ do {
 } catch {
     print(error)
 }
+
+//do {
+//    print("-------------------------------------- Save sorted books in json : --------------------------------------")
+//    let export = Export()
+//    _ = try export.saveSort(fileName: "Sorted Books", sort: SortType.byName , filter: FilterType.all)
+//} catch {
+//    print(error)
+//}
 
 
 do {

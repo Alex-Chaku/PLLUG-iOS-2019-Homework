@@ -9,6 +9,12 @@
 import Foundation
 
 class Export {
+//    func saveSort(fileName: String, sort: SortType, filter: FilterType) throws {
+//        let library = Library()
+//        let test = library.sort(sort: sort, filter: filter)
+//        try save(orders: test, fileName: fileName)
+//    }
+    
     func save(orders: [Order], fileName: String) throws {
         do {
             for item in orders {
