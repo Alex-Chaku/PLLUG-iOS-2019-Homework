@@ -1,3 +1,4 @@
+
 //
 //  Library.swift
 //  pllugHW
@@ -8,7 +9,13 @@
 
 import Foundation
 
+
+
 typealias History = (book: Book, person: Person, giveDate: Date, returnDate: Date?)
+
+func notify(_ completion: ()->()) {
+    completion()
+}
 
 enum libraryErrors: String, Error {
     case wrongBook = "Wrong book"
@@ -16,20 +23,53 @@ enum libraryErrors: String, Error {
 }
 
 class Library {
+    private enum Key: String, StorageKey {
+        var key: String {
+            return self.rawValue
+        }
+        case books
+    }
     
-    var booksInLibrary = [Book]()
+    var booksInLibrary = [Book]() {
+        didSet {
+            
+        }
+    }
     var history = [History]()
     
     func addBook(_ book: Book) throws {
-        guard !booksInLibrary.contains(book) else { throw libraryErrors.alreadyExist}
         booksInLibrary.append(book)
+        try LocalStorageManager.shared.set(value: booksInLibrary, key: Key.books)
+        try UserDefaultsStorageManager.shared.set(value: booksInLibrary, key: Key.books)
+        notify {
+            print("Added \(book.type): '\(book.title)' \(book.author)")
+        }
+    }
+    
+    func getStoredBooksFromUserDefaults() throws -> [Book] {
+        return try UserDefaultsStorageManager.shared.get(key: Key.books)
+    }
+    
+    func getSroredBooksFromFile() throws -> [Book] {
+        return try LocalStorageManager.shared.get(key: Key.books)
+    }
+    
+    func removeBooksFromUserDefaults() throws -> [Book] {
+        return try UserDefaultsStorageManager.shared.remove(key: Key.books)
+    }
+    
+    func removeBooksFromFile() throws -> [Book] {
+        return try LocalStorageManager.shared.remove(key: Key.books)
     }
     
     func giveBook(_ book: Book, to person: Person) throws {
         guard let index = booksInLibrary.firstIndex(where: {$0.uuid == book.uuid}) else { throw libraryErrors.wrongBook }
         book.isAvailable = false
         history.insert((book.copy(), person, Date(), nil), at: 0)
-        booksInLibrary[index].isAvailable = false
+        booksInLibrary[index].isAvailable =  false
+        notify {
+             print("\(book.type): '\(book.title)' \(book.author) has given to \(person.name) \(person.surname)")
+        }
     }
     
     func returnBook(_ book: Book) throws {
@@ -38,6 +78,9 @@ class Library {
         history[indexInHistory].returnDate = Date()
         history[indexInHistory].book.isAvailable = true
         booksInLibrary[indexInBooks].isAvailable = true
+        notify {
+            print("\(book.type): '\(book.title)' \(book.author) was returned")
+        }
     }
     
     enum booksState {
@@ -67,7 +110,7 @@ class Library {
         
         return components.day
     }
-
+    
     enum SortType {
         case person
         case title

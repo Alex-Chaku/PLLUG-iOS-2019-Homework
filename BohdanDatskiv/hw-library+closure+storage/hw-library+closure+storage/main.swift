@@ -1,85 +1,33 @@
 //
 //  main.swift
-//  pllugHW
+//  hw-library+closure+storage
 //
-//  Created by Богдан Дацьків on 3/26/19.
+//  Created by Bohdan Datskiv on 4/30/19.
 //  Copyright © 2019 Дацьків Богдан. All rights reserved.
 //
 
 import Foundation
 
 let person1 = Person(name: "Bohdan", surname: "Datskiv")
-let person2 = Person(name: "John", surname: "Smith")
-let person3 = Person(name: "James", surname: "Stone")
-
-var book1 = Book(title: "The Great Gatsby", author: "Scott Fitzgerald", type: .book)
-var book2 = Book(title: "To Kill a Mockingbird", author: "Harper Lee", type: .book)
-var book3 = Book(title: "Harry Potter and the Sorcerer's Stone", author: "J.K. Rowling", type: .book)
-var book4 = Book(title: "1984", author: "George Orwell", type: .book)
-var book5 = Book(title: "Fahrenheit 451", author: "Ray Bradbury", type: .book)
-
 
 let library = Library()
 
-do{
-    try library.addBook(book1)
+var book1 = Book(title: "The Great Gatsby", author: "Scott Fitzgerald", type: .book)
+var book2 = Book(title: "To Kill a Mockingbird", author: "Harper Lee", type: .book)
 
-} catch {
-    print(error)
-}
-do{
+do {
+    try library.addBook(book1)
     try library.addBook(book2)
-    
 } catch {
-    print(error)
+    print(error.localizedDescription)
 }
+
 do{
-    try library.addBook(book3)
-    
+    try library.giveBook(book1, to: person1)
+    try library.giveBook(book2, to: person1)
+    try library.returnBook(book1)
 } catch {
-    print(error)
-}
-do{
-    try library.addBook(book4)
-    
-} catch {
-    print(error)
-}
-do{
-    try library.addBook(book5)
-    
-} catch {
-    print(error)
-}
-do{
-    try library.giveBook(book5, to: person1)
-    
-} catch {
-    print(error)
-}
-do{
-    try library.giveBook(book1, to: person2)
-    
-} catch {
-    print(error)
-}
-do{
-    try library.giveBook(book4, to: person3)
-    
-} catch {
-    print(error)
-}
-do{
-    try library.returnBook(book5)
-    
-} catch {
-    print(error)
-}
-do{
-    try library.giveBook(book3, to: person1)
-    
-} catch {
-    print(error)
+    print(error.localizedDescription)
 }
 
 print("List of books in library filter: all and sorted by title")
@@ -102,9 +50,24 @@ print("\nHistory of book1")
 library.historyOfBook(book1)
 print("\nHistory of book2")
 library.historyOfBook(book2)
-print("\nHistory of book3")
-library.historyOfBook(book3)
-print("\nHistory of book4")
-library.historyOfBook(book4)
-print("\nHistory of book5")
-library.historyOfBook(book5)
+do {
+    library.booksInLibrary = try library.getStoredBooksFromUserDefaults()
+} catch {
+    print(error)
+}
+do {
+    library.booksInLibrary = try library.getSroredBooksFromFile()
+} catch {
+    print(error)
+}
+
+do {
+    library.booksInLibrary = try library.removeBooksFromUserDefaults()
+} catch {
+    print(error)
+}
+do {
+    library.booksInLibrary = try library.removeBooksFromFile()
+} catch {
+    print(error)
+}

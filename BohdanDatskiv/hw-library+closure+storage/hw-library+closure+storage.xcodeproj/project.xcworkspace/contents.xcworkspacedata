@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:pllugHW.xcodeproj">
+      location = "self:hw-library+closure+storage.xcodeproj">
    </FileRef>
 </Workspace>

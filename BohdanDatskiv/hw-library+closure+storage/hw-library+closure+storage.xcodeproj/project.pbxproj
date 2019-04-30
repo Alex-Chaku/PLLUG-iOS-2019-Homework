@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C04DC3B0224B820B00FAB75F /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04DC3AF224B820A00FAB75F /* Person.swift */; };
-		C0934F7F224AA74000FF5FFB /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0934F7E224AA74000FF5FFB /* main.swift */; };
-		C0934F86224AA7CB00FF5FFB /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0934F85224AA7CB00FF5FFB /* Library.swift */; };
-		C0934F88224AA7E500FF5FFB /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0934F87224AA7E500FF5FFB /* Book.swift */; };
+		C08D943A2278684A00E530B3 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D94392278684A00E530B3 /* main.swift */; };
+		C08D94412278686A00E530B3 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D94402278686A00E530B3 /* Book.swift */; };
+		C08D9443227868DB00E530B3 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D9442227868DB00E530B3 /* Person.swift */; };
+		C08D9445227868FA00E530B3 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D9444227868FA00E530B3 /* Library.swift */; };
+		C08D944722786BBD00E530B3 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D944622786BBD00E530B3 /* StorageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		C0934F79224AA74000FF5FFB /* CopyFiles */ = {
+		C08D94342278684900E530B3 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -26,15 +27,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C04DC3AF224B820A00FAB75F /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
-		C0934F7B224AA74000FF5FFB /* pllugHW */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pllugHW; sourceTree = BUILT_PRODUCTS_DIR; };
-		C0934F7E224AA74000FF5FFB /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		C0934F85224AA7CB00FF5FFB /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
-		C0934F87224AA7E500FF5FFB /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		C08D94362278684900E530B3 /* hw-library+closure+storage */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "hw-library+closure+storage"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C08D94392278684A00E530B3 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		C08D94402278686A00E530B3 /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		C08D9442227868DB00E530B3 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		C08D9444227868FA00E530B3 /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
+		C08D944622786BBD00E530B3 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		C0934F78224AA74000FF5FFB /* Frameworks */ = {
+		C08D94332278684900E530B3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -44,101 +46,103 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C0934F72224AA74000FF5FFB = {
+		C08D942D2278684900E530B3 = {
 			isa = PBXGroup;
 			children = (
-				C0934F7D224AA74000FF5FFB /* pllugHW */,
-				C0934F7C224AA74000FF5FFB /* Products */,
+				C08D94382278684900E530B3 /* hw-library+closure+storage */,
+				C08D94372278684900E530B3 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		C0934F7C224AA74000FF5FFB /* Products */ = {
+		C08D94372278684900E530B3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C0934F7B224AA74000FF5FFB /* pllugHW */,
+				C08D94362278684900E530B3 /* hw-library+closure+storage */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C0934F7D224AA74000FF5FFB /* pllugHW */ = {
+		C08D94382278684900E530B3 /* hw-library+closure+storage */ = {
 			isa = PBXGroup;
 			children = (
-				C0934F7E224AA74000FF5FFB /* main.swift */,
-				C0934F85224AA7CB00FF5FFB /* Library.swift */,
-				C0934F87224AA7E500FF5FFB /* Book.swift */,
-				C04DC3AF224B820A00FAB75F /* Person.swift */,
+				C08D94392278684A00E530B3 /* main.swift */,
+				C08D94402278686A00E530B3 /* Book.swift */,
+				C08D9442227868DB00E530B3 /* Person.swift */,
+				C08D9444227868FA00E530B3 /* Library.swift */,
+				C08D944622786BBD00E530B3 /* StorageManager.swift */,
 			);
-			path = pllugHW;
+			path = "hw-library+closure+storage";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C0934F7A224AA74000FF5FFB /* pllugHW */ = {
+		C08D94352278684900E530B3 /* hw-library+closure+storage */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C0934F82224AA74000FF5FFB /* Build configuration list for PBXNativeTarget "pllugHW" */;
+			buildConfigurationList = C08D943D2278684A00E530B3 /* Build configuration list for PBXNativeTarget "hw-library+closure+storage" */;
 			buildPhases = (
-				C0934F77224AA74000FF5FFB /* Sources */,
-				C0934F78224AA74000FF5FFB /* Frameworks */,
-				C0934F79224AA74000FF5FFB /* CopyFiles */,
+				C08D94322278684900E530B3 /* Sources */,
+				C08D94332278684900E530B3 /* Frameworks */,
+				C08D94342278684900E530B3 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = pllugHW;
-			productName = pllugHW;
-			productReference = C0934F7B224AA74000FF5FFB /* pllugHW */;
+			name = "hw-library+closure+storage";
+			productName = "hw-library+closure+storage";
+			productReference = C08D94362278684900E530B3 /* hw-library+closure+storage */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		C0934F73224AA74000FF5FFB /* Project object */ = {
+		C08D942E2278684900E530B3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Дацьків Богдан";
 				TargetAttributes = {
-					C0934F7A224AA74000FF5FFB = {
-						CreatedOnToolsVersion = 10.2;
+					C08D94352278684900E530B3 = {
+						CreatedOnToolsVersion = 10.2.1;
 					};
 				};
 			};
-			buildConfigurationList = C0934F76224AA74000FF5FFB /* Build configuration list for PBXProject "pllugHW" */;
+			buildConfigurationList = C08D94312278684900E530B3 /* Build configuration list for PBXProject "hw-library+closure+storage" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = C0934F72224AA74000FF5FFB;
-			productRefGroup = C0934F7C224AA74000FF5FFB /* Products */;
+			mainGroup = C08D942D2278684900E530B3;
+			productRefGroup = C08D94372278684900E530B3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C0934F7A224AA74000FF5FFB /* pllugHW */,
+				C08D94352278684900E530B3 /* hw-library+closure+storage */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		C0934F77224AA74000FF5FFB /* Sources */ = {
+		C08D94322278684900E530B3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0934F7F224AA74000FF5FFB /* main.swift in Sources */,
-				C0934F86224AA7CB00FF5FFB /* Library.swift in Sources */,
-				C04DC3B0224B820B00FAB75F /* Person.swift in Sources */,
-				C0934F88224AA7E500FF5FFB /* Book.swift in Sources */,
+				C08D9443227868DB00E530B3 /* Person.swift in Sources */,
+				C08D9445227868FA00E530B3 /* Library.swift in Sources */,
+				C08D944722786BBD00E530B3 /* StorageManager.swift in Sources */,
+				C08D94412278686A00E530B3 /* Book.swift in Sources */,
+				C08D943A2278684A00E530B3 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		C0934F80224AA74000FF5FFB /* Debug */ = {
+		C08D943B2278684A00E530B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -199,7 +203,7 @@
 			};
 			name = Debug;
 		};
-		C0934F81224AA74000FF5FFB /* Release */ = {
+		C08D943C2278684A00E530B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -253,7 +257,7 @@
 			};
 			name = Release;
 		};
-		C0934F83224AA74000FF5FFB /* Debug */ = {
+		C08D943E2278684A00E530B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -263,7 +267,7 @@
 			};
 			name = Debug;
 		};
-		C0934F84224AA74000FF5FFB /* Release */ = {
+		C08D943F2278684A00E530B3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -276,25 +280,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C0934F76224AA74000FF5FFB /* Build configuration list for PBXProject "pllugHW" */ = {
+		C08D94312278684900E530B3 /* Build configuration list for PBXProject "hw-library+closure+storage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C0934F80224AA74000FF5FFB /* Debug */,
-				C0934F81224AA74000FF5FFB /* Release */,
+				C08D943B2278684A00E530B3 /* Debug */,
+				C08D943C2278684A00E530B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C0934F82224AA74000FF5FFB /* Build configuration list for PBXNativeTarget "pllugHW" */ = {
+		C08D943D2278684A00E530B3 /* Build configuration list for PBXNativeTarget "hw-library+closure+storage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C0934F83224AA74000FF5FFB /* Debug */,
-				C0934F84224AA74000FF5FFB /* Release */,
+				C08D943E2278684A00E530B3 /* Debug */,
+				C08D943F2278684A00E530B3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = C0934F73224AA74000FF5FFB /* Project object */;
+	rootObject = C08D942E2278684900E530B3 /* Project object */;
 }
