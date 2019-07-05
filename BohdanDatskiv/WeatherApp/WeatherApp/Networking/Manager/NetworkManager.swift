@@ -32,12 +32,48 @@ enum Result<String>{
 // MARK: - NetworkManager
 //----------------------------------------
 struct NetworkManager {
-    static let environment : NetworkEnvironment = .production
-    static let APIKey = "18fa771c83f22c19328d98863faa10c6"
-    let router = Router<ForecastApi>()
     
-    func getCityCurrentWeather(id: Int, completion: @escaping (_ movie: CurrentWeather?,_ error: String?)->()){
-        router.request(.weather(id: id)) { data, response, error in
+    static let shared = NetworkManager()
+    
+    static let forecastAPIKey = "18fa771c83f22c19328d98863faa10c6"
+    static let geocodingAPIKey = "AIzaSyD6ke-MXsLkZXlRbI41_tB4N9OL6fBwtQ4"
+    let forecastRouter = Router<ForecastApi>()
+    let geocodingRouter = Router<GeocodingApi>()
+    
+    private init() {}
+    
+    func getCoordinateForLocation(name: String, comletion: @escaping (_ gecoding: Geocoding?,_ error: String?)->()) {
+        geocodingRouter.request(.location(name: name)) { data, response, error in
+            if error != nil {
+                comletion(nil, "Please check your network connection.")
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                let result = self.handleNetworkResponse(response)
+                switch result {
+                case .success:
+                    guard let responseData = data else {
+                        comletion(nil, NetworkResponse.noData.rawValue)
+                        return
+                    }
+                    do {
+                        let decoder = JSONDecoder()
+                        decoder.keyDecodingStrategy = .convertFromSnakeCase
+                        let apiResponse = try decoder.decode(Geocoding.self, from: responseData)
+                        comletion(apiResponse, nil)
+                    } catch {
+                        print(error)
+                        comletion(nil, NetworkResponse.unableToDecode.rawValue)
+                    }
+                case .failure(let networkFailureError):
+                    comletion(nil, networkFailureError)
+                }
+            }
+        }
+    }
+    
+    func getCityCurrentWeather(coordinate: Coordinate, completion: @escaping (_ currentWeather: CurrentWeather?,_ error: String?)->()){
+        forecastRouter.request(.weather(coordinate: coordinate)) { data, response, error in
         
             if error != nil {
                 completion(nil, "Please check your network connection.")
@@ -65,8 +101,8 @@ struct NetworkManager {
         }
     }
     
-    func getCityForecast(id: Int, completion: @escaping (_ movie: CityForecast?,_ error: String?)->()){
-        router.request(.forecast(id: id)) { data, response, error in
+    func getCityForecast(coordinate: Coordinate, completion: @escaping (_ cityForecast: CityForecast?,_ error: String?)->()){
+        forecastRouter.request(.forecast(coordinate: coordinate)) { data, response, error in
             
             if error != nil {
                 completion(nil, "Please check your network connection.")

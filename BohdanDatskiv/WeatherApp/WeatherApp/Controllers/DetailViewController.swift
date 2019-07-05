@@ -11,42 +11,74 @@ import UIKit
 //----------------------------------------
 // MARK: - DetailViewController
 //----------------------------------------
-class DetailViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class DetailViewController: UIViewController {
     
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var currentTempLabel: UILabel!
-    @IBOutlet weak var windLabel: UILabel!
-    @IBOutlet weak var cloudsLabel: UILabel!
-    @IBOutlet weak var humidityLabel: UILabel!
-    @IBOutlet weak var preassureLabel: UILabel!
     @IBOutlet weak var cityNameLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    let networkManager = NetworkManager()
-    var selectedCityId: Int!
+    @IBOutlet weak var sunriseTimeLabel: UILabel!
+    @IBOutlet weak var sunsetTimeLabel: UILabel!
+    @IBOutlet weak var preassureLabel: UILabel!
+    @IBOutlet weak var humidityLabel: UILabel!
+    @IBOutlet weak var cloudsLabel: UILabel!
+    @IBOutlet weak var windLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    var selectedCityId: Coordinate!
     var cityForecast: CityForecast?
     var isTempScaleToggled = false
-    var currentTemp: Int!
-    var weatherDescription: String!
+    var currentWeather: CurrentWeather?
+    var dailyForecast = [(key: String, value: [Forecast])]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        networkManager.getCityForecast(id: selectedCityId) { (cityForecast, error) in
+        activityIndicator.startAnimating()
+        collectionView.isHidden = true
+        tableView.isHidden = true
+        NetworkManager.shared.getCityForecast(coordinate: selectedCityId) { (cityForecast, error) in
             self.cityForecast = cityForecast
             DispatchQueue.main.async {
-                self.cityNameLabel.text = cityForecast!.city.name
-                self.windLabel.text = String(cityForecast!.forecast.first!.wind.speed)+" meter/sec"
-                self.cloudsLabel.text = String(cityForecast!.forecast.first!.clouds.all)+"%"
-                self.preassureLabel.text = String(cityForecast!.forecast.first!.main.pressure)+" hPa"
-                self.humidityLabel.text = String(cityForecast!.forecast.first!.main.humidity)+"%"
-                self.currentTempLabel.text = String(self.currentTemp)
-                self.descriptionLabel.text = self.weatherDescription
                 self.collectionView.reloadData()
+
+                guard let cityForecast = self.cityForecast else { return }
+                let dailyForecast = Dictionary(grouping: cityForecast.forecast, by: {$0.dateInDay})
+                /// sorting days
+                var sortedDailyForecast = dailyForecast.sorted {$0.value[0].dateText < $1.value[0].dateText }
+                sortedDailyForecast.removeFirst()
+                self.dailyForecast = sortedDailyForecast
+                self.tableView.reloadData()
+                self.activityIndicator.stopAnimating()
+                self.collectionView.isHidden = false
+                self.tableView.isHidden = false
             }
         }
+        guard let currentWeather = self.currentWeather else { return }
+        self.cityNameLabel.text = currentWeather.name
+        self.windLabel.text = String(currentWeather.wind.speed)+" meter/sec"
+        self.cloudsLabel.text = String(currentWeather.clouds.all)+"%"
+        self.preassureLabel.text = String(currentWeather.main.pressure)+" hPa"
+        self.humidityLabel.text = String(currentWeather.main.humidity)+"%"
+        self.descriptionLabel.text = currentWeather.weather.first!.description
+        self.sunsetTimeLabel.text = currentWeather.sys.sunset
+        self.sunriseTimeLabel.text = currentWeather.sys.sunrise
+        let temp = self.isTempScaleToggled ? currentWeather.main.tempInFarenheit : currentWeather.main.tempInCelsius
+        self.currentTempLabel.text = String(temp)+"°"
     }
 
+    @IBAction func backToCitiesButtonTapped(_ sender: UIButton) {
+        let dvc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CitiesWeather") as! CitiesViewController
+        self.present(dvc, animated: true, completion: nil)
+    }
+    
+}
+
+extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard cityForecast != nil else { return 0 }
+        /// hourly forecast for 24 hour
         return 8
     }
     
@@ -55,16 +87,36 @@ class DetailViewController: UIViewController, UICollectionViewDelegate, UICollec
         guard let cityForecast = cityForecast else { return cell }
         let temp = isTempScaleToggled ? cityForecast.forecast[indexPath.row].main.tempInFarenheit : cityForecast.forecast[indexPath.row].main.tempInCelsius
         cell.tempLabel.text = String(temp)+"°"
-        cell.timeLabel.text = cityForecast.forecast[indexPath.row].date
-        guard let imageData = try? Data(contentsOf: cityForecast.forecast[indexPath.row].weather.first!.icon!) else { return cell }
-        cell.weatherImage.image = UIImage(data: imageData)
+        cell.timeLabel.text = cityForecast.forecast[indexPath.row].dateInHour
+        cell.weatherImage.image = UIImage(named: cityForecast.forecast[indexPath.row].weather.first!.icon)
         return cell
     }
+}
+
+extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
-    @IBAction func backToCitiesButtonTapped(_ sender: UIButton) {
-        let dvc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CitiesWeather") as! CitiesViewController
-        dvc.isTempScaleToggled = isTempScaleToggled
-        self.present(dvc, animated: true, completion: nil)
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dailyForecast.count
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell") as! DailyWeatherTableViewCell
+        cell.dayNameLabel.text = dailyForecast[indexPath.row].key
+        if isTempScaleToggled {
+            let maxTemp = dailyForecast[indexPath.row].value.map({$0.main.tempInFarenheit}).max()
+            let minTemp = dailyForecast[indexPath.row].value.map({$0.main.tempInFarenheit}).min()
+            cell.maxTempLabel.text = String(maxTemp!)
+            cell.minTempLabel.text = String(minTemp!)
+        } else {
+            let maxTemp = dailyForecast[indexPath.row].value.map({$0.main.tempInCelsius}).max()
+            let minTemp = dailyForecast[indexPath.row].value.map({$0.main.tempInCelsius}).min()
+            cell.maxTempLabel.text = String(maxTemp!)
+            cell.minTempLabel.text = String(minTemp!)
+        }
+        let icons = dailyForecast[indexPath.row].value.map({$0.weather.map({$0.icon}).first!}).map({($0, 1)})
+        let countIcons = Dictionary(icons, uniquingKeysWith: +)
+        guard let mostUsedIcon = countIcons.max(by: {$0.value < $1.value}) else { return cell }
+        cell.weatherImage.image = UIImage(named: mostUsedIcon.key)
+        return cell
+    }
 }

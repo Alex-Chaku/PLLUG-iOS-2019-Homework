@@ -8,92 +8,66 @@
 
 import UIKit
 
-
-var cities = [CityData]()
-
 //----------------------------------------
 // MARK: - AddCityViewController
 //----------------------------------------
-class AddCityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class AddCityViewController: UIViewController {
     
-    var searchedCities = [CityData]()
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
-    var isSearching = false
     @IBOutlet weak var searchCity: UISearchBar!
-    
     @IBOutlet weak var tableView: UITableView!
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if cities.isEmpty {
-            self.activityIndicator.startAnimating()
-            DispatchQueue.main.async {
-                let data = try? Data(contentsOf: URL(fileURLWithPath: Bundle.main.path(forResource: "cities", ofType: "json")!))
-                cities = try! JSONDecoder().decode([CityData].self, from: data!)
-                cities.sort {$0.name > $1.name}
-                self.tableView.reloadData()
-                self.activityIndicator.stopAnimating()
-            }
-        }
-    }
+    
+    var cities: Geocoding?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.tableFooterView = UIView()
+
         activityIndicator.hidesWhenStopped = true
         
         searchCity.showsCancelButton = true
         searchCity.delegate = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        searchCity.enablesReturnKeyAutomatically = true
         searchCity.becomeFirstResponder()
     }
+}
+
+extension AddCityViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isSearching {
-            return searchedCities.count
-        } else {
-            return cities.count
-        }
+        guard let cities = cities else { return 0 }
+        return cities.results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! AddCityTableViewCell
-        if isSearching {
-            cell.cityNameLabel.text = searchedCities[indexPath.row].name
-            
-        } else {
-            cell.cityNameLabel.text = cities[indexPath.row].name
+        guard let cities = cities else {
+            return cell
         }
+        cell.cityNameLabel.text = cities.results[indexPath.row].formattedAddress
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dvc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CitiesWeather") as! CitiesViewController
-        if isSearching {
-            dvc.addLocationId(searchedCities[indexPath.row].id)
-        } else {
-            dvc.addLocationId(cities[indexPath.row].id)
+        guard let cities = cities else { return }
+        let newCityLocation = cities.results[indexPath.row].geometry.location
+        let newCityCoordinate = Coordinate(lon: newCityLocation.lng, lat: newCityLocation.lat)
+        do {
+            try dvc.addCityCoordinate(newCityCoordinate)
+        } catch {
+            print(error)
         }
         self.present(dvc, animated: true, completion: nil)
     }
 }
 
 extension AddCityViewController: UISearchBarDelegate {
-    func searchCities(_ text: String) {
-        if text == "" {
-            searchedCities = cities
-        } else {
-            searchedCities = cities.filter({$0.name.lowercased().contains(text.lowercased())})
-        }
-    }
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchBar.showsCancelButton = true
-        searchCities(searchText)
-        isSearching = true
-        self.tableView.reloadData()
+        cities = nil
+        tableView.reloadData()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -101,31 +75,15 @@ extension AddCityViewController: UISearchBarDelegate {
         self.present(dvc, animated: true, completion: nil)
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
-    {
-        searchBar.endEditing(true)
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        DispatchQueue.main.async {
-            if let cancelButton = searchBar.cancelButton {
-                cancelButton.isEnabled = true
-                cancelButton.isUserInteractionEnabled = true
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text else { return }
+        activityIndicator.startAnimating()
+        NetworkManager.shared.getCoordinateForLocation(name: searchText) { (geocoding, error) in
+            self.cities = geocoding
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.activityIndicator.stopAnimating()
             }
         }
     }
 }
-
-extension UISearchBar {
-    var cancelButton: UIButton? {
-        for subView1 in subviews {
-            for subView2 in subView1.subviews {
-                if let cancelButton = subView2 as? UIButton {
-                    return cancelButton
-                }
-            }
-        }
-        return nil
-    }
-}
-

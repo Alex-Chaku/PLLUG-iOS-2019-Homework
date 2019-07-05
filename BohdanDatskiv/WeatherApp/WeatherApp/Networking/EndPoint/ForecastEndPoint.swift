@@ -9,30 +9,21 @@
 import Foundation
 
 //----------------------------------------
-// MARK: - NetworkEnvironment
-//----------------------------------------
-enum NetworkEnvironment {
-    case production
-}
-
-//----------------------------------------
 // MARK: - ForecastApi
 //----------------------------------------
 public enum ForecastApi {
-    case weather(id: Int)
-    case forecast(id: Int)
+    case weather(coordinate: Coordinate)
+    case forecast(coordinate: Coordinate)
 }
 
 extension ForecastApi: EndPointType {
     
-    var environmentBaseURL : String {
-        switch NetworkManager.environment {
-        case .production: return "https://api.openweathermap.org/data/2.5/"
-        }
+    var stringBaseURL : String {
+        return "https://api.openweathermap.org/data/2.5/"
     }
     
     var baseURL: URL {
-        guard let url = URL(string: environmentBaseURL) else { fatalError("baseURL could not be configured.")}
+        guard let url = URL(string: stringBaseURL) else { fatalError("baseURL could not be configured.")}
         return url
     }
     
@@ -51,20 +42,20 @@ extension ForecastApi: EndPointType {
     
     var task: HTTPTask {
         switch self {
-        case .weather(let id):
+        case .weather(let coordinate):
             return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
-                                      urlParameters: ["id":id,
+                                      urlParameters: ["lat":coordinate.lat,
+                                                      "lon":coordinate.lon,
                                                       "units":"metric",
-                                                      "appid":NetworkManager.APIKey])
-        case .forecast(let id):
+                                                      "appid":NetworkManager.forecastAPIKey])
+        case .forecast(let coordinate):
             return .requestParameters(bodyParameters: nil,
                                       bodyEncoding: .urlEncoding,
-                                      urlParameters: ["id":id,
+                                      urlParameters: ["lat":coordinate.lat,
+                                                      "lon":coordinate.lon,
                                                       "units":"metric",
-                                                      "appid":NetworkManager.APIKey])
-        default:
-            return .request
+                                                      "appid":NetworkManager.forecastAPIKey])
         }
     }
     

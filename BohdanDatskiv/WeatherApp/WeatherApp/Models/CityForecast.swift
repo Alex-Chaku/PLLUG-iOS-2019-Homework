@@ -27,6 +27,7 @@ struct CityForecast: Codable {
         case forecast = "list"
         case city
     }
+    
     /// Init
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CityForecastCodingKeys.self)
@@ -42,11 +43,13 @@ struct CityForecast: Codable {
 // MARK: - Forecast
 //----------------------------------------
 struct Forecast: Codable {
-    let date: String
+    let dateInHour: String
+    let dateInDay: String
     let main: Main
     let weather: [Weather]
     let clouds: Clouds
     let wind: Wind
+    let dateText: String
     
     /// Coding Keys
     private enum ForecastCodingKeys: String, CodingKey {
@@ -55,6 +58,7 @@ struct Forecast: Codable {
         case weather
         case clouds
         case wind
+        case dateText = "dt_txt"
     }
     
     /// Init
@@ -62,10 +66,13 @@ struct Forecast: Codable {
         let container = try decoder.container(keyedBy: ForecastCodingKeys.self)
         main = try container.decode(Main.self, forKey: .main)
         let secondsSince1970 = try container.decode(Int.self, forKey: .date)
-        date = AppDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(secondsSince1970)), timeZone: timezone, format: .hour)
+        let date = Date(timeIntervalSince1970: TimeInterval(secondsSince1970))
+        dateInHour = AppDateFormatter.string(from: date, timeZone: TimeZone.current, format: .hour)
+        dateInDay = AppDateFormatter.string(from: date, timeZone: TimeZone.current, format: .day)
         weather = try container.decode([Weather].self, forKey: .weather)
         clouds = try container.decode(Clouds.self, forKey: .clouds)
         wind = try container.decode(Wind.self, forKey: .wind)
+        dateText = try container.decode(String.self, forKey: .dateText)
     }
 
 }
@@ -79,5 +86,5 @@ struct City: Codable {
     let coord: Coordinate
     let country: String
     let population: Int?
-    let timezone: Int
+    public var timezone: Int
 }

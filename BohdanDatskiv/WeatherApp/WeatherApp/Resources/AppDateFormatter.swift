@@ -40,20 +40,18 @@ struct AppDateFormatter {
     }
     
     ///Public
-    static func string(from date: Date?, timeZone: Int, format: Format) -> String {
+    static func string(from date: Date?, timeZone: TimeZone, format: Format) -> String {
         guard let date = date else { return "" }
         switch format {
         case .hourAndMinutes:
-            hourAndMinutesDateFormatter.timeZone = TimeZone(secondsFromGMT: timeZone)
+            hourAndMinutesDateFormatter.timeZone = timeZone
             return hourAndMinutesDateFormatter.string(from: date)
         case .hour:
-            hourDateFormatter.timeZone = TimeZone(secondsFromGMT: timeZone)
+            hourDateFormatter.timeZone = timeZone
             return hourDateFormatter.string(from: date)
         case .day:
-            dayDateFormatter.timeZone = TimeZone(secondsFromGMT: timeZone)
+            dayDateFormatter.timeZone = timeZone
             return dayDateFormatter.string(from: date)
         }
-//        dateFormatter.timeZone = TimeZone(secondsFromGMT: timeZone)
-//        return dateFormatter.string(from: date)
     }
 }
