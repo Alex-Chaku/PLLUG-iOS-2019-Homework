@@ -26,7 +26,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var windLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var selectedCityId: Coordinate!
+    var selectedCityCoordindate: Coordinate!
     var cityForecast: CityForecast?
     var isTempScaleToggled = false
     var currentWeather: CurrentWeather?
@@ -37,7 +37,7 @@ class DetailViewController: UIViewController {
         activityIndicator.startAnimating()
         collectionView.isHidden = true
         tableView.isHidden = true
-        NetworkManager.shared.getCityForecast(coordinate: selectedCityId) { (cityForecast, error) in
+        NetworkManager.shared.getCityForecast(coordinate: selectedCityCoordindate) { (cityForecast, error) in
             self.cityForecast = cityForecast
             DispatchQueue.main.async {
                 self.collectionView.reloadData()

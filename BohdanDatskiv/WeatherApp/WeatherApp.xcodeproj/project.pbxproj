@@ -12,6 +12,7 @@
 		C00C03C122AE4971006490B5 /* AddCityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00C03C022AE4971006490B5 /* AddCityViewController.swift */; };
 		C00C03C322AE5AC8006490B5 /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00C03C222AE5AC8006490B5 /* CurrentWeather.swift */; };
 		C00C03C622AE6102006490B5 /* CityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00C03C522AE6102006490B5 /* CityTableViewCell.swift */; };
+		C0137AAE22D4E0160061FB03 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0137AAD22D4E0160061FB03 /* ViewController.swift */; };
 		C04EFD8C22CA75AB00F36694 /* UserDefaultsDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04EFD8B22CA75AB00F36694 /* UserDefaultsDataManager.swift */; };
 		C04EFD8E22CA7C3E00F36694 /* DailyWeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04EFD8D22CA7C3E00F36694 /* DailyWeatherTableViewCell.swift */; };
 		C04EFD9222CBA12300F36694 /* GeocodingEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04EFD9122CBA12300F36694 /* GeocodingEndPoint.swift */; };
@@ -42,6 +43,7 @@
 		C00C03C022AE4971006490B5 /* AddCityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityViewController.swift; sourceTree = "<group>"; };
 		C00C03C222AE5AC8006490B5 /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 		C00C03C522AE6102006490B5 /* CityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityTableViewCell.swift; sourceTree = "<group>"; };
+		C0137AAD22D4E0160061FB03 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = WeatherApp/ViewController.swift; sourceTree = SOURCE_ROOT; };
 		C04EFD8B22CA75AB00F36694 /* UserDefaultsDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsDataManager.swift; sourceTree = "<group>"; };
 		C04EFD8D22CA7C3E00F36694 /* DailyWeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherTableViewCell.swift; sourceTree = "<group>"; };
 		C04EFD9122CBA12300F36694 /* GeocodingEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingEndPoint.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				C00C03BE22AE4578006490B5 /* CitiesViewController.swift */,
 				C0AEAD8C22B792E20092E699 /* DetailViewController.swift */,
 				C00C03C022AE4971006490B5 /* AddCityViewController.swift */,
+				C0137AAD22D4E0160061FB03 /* ViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0137AAE22D4E0160061FB03 /* ViewController.swift in Sources */,
 				C09073A622B4FB3600A95FE2 /* NetworkManager.swift in Sources */,
 				C04EFD9422CBFCDB00F36694 /* Geocoding.swift in Sources */,
 				C090739322B4F06100A95FE2 /* HTTPTask.swift in Sources */,

@@ -113,15 +113,23 @@ class CitiesViewController: UIViewController {
 extension CitiesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return citiesCurrentWeather.count
+        guard localWeather != nil else { return 0 }
+        return citiesCurrentWeather.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CityTableViewCell
-        cell.cityNameLabel.text = citiesCurrentWeather[indexPath.row].name
-        let temp = isTempScaleToggled.first! ? citiesCurrentWeather[indexPath.row].main.tempInFarenheit : citiesCurrentWeather[indexPath.row].main.tempInCelsius
-        cell.cityTemparetureLabel.text = String(temp)+"°"
-        cell.timeLabel.text = citiesCurrentWeather[indexPath.row].date
+        if indexPath.row == 0, let localWeather = localWeather {
+            cell.cityNameLabel.text = localWeather.name + " 📍"
+            let temp = isTempScaleToggled.first! ? localWeather.main.tempInFarenheit : localWeather.main.tempInCelsius
+            cell.cityTemparetureLabel.text = String(temp)+"°"
+            cell.timeLabel.text = localWeather.date
+        } else {
+            cell.cityNameLabel.text = citiesCurrentWeather[indexPath.row - 1].name
+            let temp = isTempScaleToggled.first! ? citiesCurrentWeather[indexPath.row - 1].main.tempInFarenheit : citiesCurrentWeather[indexPath.row - 1].main.tempInCelsius
+            cell.cityTemparetureLabel.text = String(temp)+"°"
+            cell.timeLabel.text = citiesCurrentWeather[indexPath.row - 1].date
+        }
         return cell
     }
     
@@ -133,7 +141,7 @@ extension CitiesViewController: UITableViewDelegate, UITableViewDataSource {
             } catch {
                 print(error)
             }
-            self.citiesCurrentWeather.remove(at: indexPath.row)
+            self.citiesCurrentWeather.remove(at: indexPath.row - 1)
             self.tableView.reloadData()
         }
         return [deleteAction]
@@ -141,9 +149,14 @@ extension CitiesViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dvc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Detail") as! DetailViewController
-        dvc.selectedCityId = citiesCurrentWeather[indexPath.row].coordinate
+        if indexPath.row == 0 {
+            dvc.selectedCityCoordindate = localWeather?.coordinate
+            dvc.currentWeather = localWeather
+        } else {
+            dvc.currentWeather = citiesCurrentWeather[indexPath.row - 1]
+            dvc.selectedCityCoordindate = citiesCurrentWeather[indexPath.row - 1].coordinate
+        }
         dvc.isTempScaleToggled = isTempScaleToggled.first!
-        dvc.currentWeather = citiesCurrentWeather[indexPath.row]
         self.present(dvc, animated: true, completion: nil)
         
     }
@@ -155,9 +168,7 @@ extension CitiesViewController: CLLocationManagerDelegate {
         let currentLocation = locations.first!
         let localCoordinate = Coordinate(lon: currentLocation.coordinate.longitude, lat: currentLocation.coordinate.latitude)
         NetworkManager.shared.getCityCurrentWeather(coordinate: localCoordinate) { (weather, error) in
-            guard var weather = weather else { return }
-            weather.name += " 📍"
-            self.citiesCurrentWeather.insert(weather, at: 0)
+            self.localWeather = weather
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.tableView.isHidden = false

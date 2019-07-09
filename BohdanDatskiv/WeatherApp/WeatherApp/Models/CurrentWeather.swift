@@ -23,7 +23,7 @@ struct CurrentWeather: Codable {
     let sys: Sys
     let timezone: Int
     let id: Int
-    var name: String
+    let name: String
     let cod: Int
     
     /// Coding Keys
