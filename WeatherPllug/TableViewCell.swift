@@ -10,17 +10,8 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
-    
-   
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-       
-        
-       
-            
-        
-        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -28,12 +19,8 @@ class TableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
     func registerCollectionView<DataSourse:UICollectionViewDataSource>(datasource:DataSourse) {
         self.collectionView.dataSource = datasource
         collectionView.reloadData()
     }
-    
-    
-
 }

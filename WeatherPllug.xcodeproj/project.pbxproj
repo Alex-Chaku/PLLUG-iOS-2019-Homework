@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0327A8E522D3781B00E77DC2 /* Occasionally.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0327A8E422D3781B00E77DC2 /* Occasionally.swift */; };
 		0327A8E722D3790D00E77DC2 /* TableViewCell 15-07-25-026.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0327A8E622D3790D00E77DC2 /* TableViewCell 15-07-25-026.swift */; };
+		0327A91822D54C4400E77DC2 /* StructAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0327A91722D54C4400E77DC2 /* StructAPI.swift */; };
+		0327A91A22D54CF600E77DC2 /* RestApiTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0327A91922D54CF600E77DC2 /* RestApiTVC.swift */; };
 		0359AB1E22D0FAFD00BF8B93 /* NewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0359AB1D22D0FAFC00BF8B93 /* NewTableViewCell.swift */; };
 		0359AB2622D238FE00BF8B93 /* ParsingJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0359AB2522D238FE00BF8B93 /* ParsingJSON.swift */; };
 		0393BA5D22B2E81100FBC6D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0393BA5C22B2E81100FBC6D0 /* AppDelegate.swift */; };
@@ -29,6 +31,8 @@
 /* Begin PBXFileReference section */
 		0327A8E422D3781B00E77DC2 /* Occasionally.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Occasionally.swift; sourceTree = "<group>"; };
 		0327A8E622D3790D00E77DC2 /* TableViewCell 15-07-25-026.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TableViewCell 15-07-25-026.swift"; path = "../../../../../../.Trash/TableViewCell 15-07-25-026.swift"; sourceTree = "<group>"; };
+		0327A91722D54C4400E77DC2 /* StructAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructAPI.swift; sourceTree = "<group>"; };
+		0327A91922D54CF600E77DC2 /* RestApiTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestApiTVC.swift; sourceTree = "<group>"; };
 		0359AB1D22D0FAFC00BF8B93 /* NewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewTableViewCell.swift; path = ../../../../../.Trash/NewTableViewCell.swift; sourceTree = "<group>"; };
 		0359AB2522D238FE00BF8B93 /* ParsingJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingJSON.swift; sourceTree = "<group>"; };
 		0393BA5922B2E81100FBC6D0 /* WeatherPllug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherPllug.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +141,8 @@
 			isa = PBXGroup;
 			children = (
 				03D8256022BD427200968C8F /* TableViewController.swift */,
+				0327A91722D54C4400E77DC2 /* StructAPI.swift */,
+				0327A91922D54CF600E77DC2 /* RestApiTVC.swift */,
 			);
 			path = "List of cities";
 			sourceTree = "<group>";
@@ -289,7 +295,9 @@
 				03984A3122C3A553008F4B92 /* InsideTableViewCell.swift in Sources */,
 				0327A8E722D3790D00E77DC2 /* TableViewCell 15-07-25-026.swift in Sources */,
 				03984A3322C42752008F4B92 /* ExtensionDate.swift in Sources */,
+				0327A91A22D54CF600E77DC2 /* RestApiTVC.swift in Sources */,
 				03984A2F22C3A2F1008F4B92 /* MainTableViewCell.swift in Sources */,
+				0327A91822D54C4400E77DC2 /* StructAPI.swift in Sources */,
 				0393BA5F22B2E81100FBC6D0 /* ViewController.swift in Sources */,
 				0359AB1E22D0FAFD00BF8B93 /* NewTableViewCell.swift in Sources */,
 				03984A1F22C12863008F4B92 /* CollectionViewCell.swift in Sources */,

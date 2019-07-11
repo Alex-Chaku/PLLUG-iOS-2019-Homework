@@ -9,33 +9,24 @@
 import Foundation
 import UIKit
 
-
-
-extension ViewController{
+extension ViewController {
     func convertUTC(dateToConvert: String) -> String {
         let format = DateFormatter()
         format.dateFormat =  "MMM d, yyyy 'at' HH:mm:ss 'AM'"
         let convertedDate = format.date(from: dateToConvert)
         format.timeZone = TimeZone.current
         format.dateFormat = "MMM d"
-        let localDate = format.string(from:convertedDate!)
+        let localDate = format.string(from: convertedDate!)
         return localDate
     }
-    
-    
     func convertUTCDate(dateToConvert: String) -> String {
         let format = DateFormatter()
         format.dateFormat =  "yyyy-MM-dd HH:mm:ss "
         let convertedDate = format.date(from: dateToConvert)
         format.timeZone = TimeZone.current
         format.dateFormat = "HH"
-        let localDateStr = format.string(from:convertedDate!)
+        let localDateStr = format.string(from: convertedDate!)
         hour = localDateStr
-        
-        
         return localDateStr
     }
-    
-    
-    
 }

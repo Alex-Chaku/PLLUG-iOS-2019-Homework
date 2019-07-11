@@ -9,4 +9,5 @@ target 'WeatherPllug' do
   pod 'Alamofire' 
   pod 'SwiftyJSON'
   pod 'NVActivityIndicatorView'
+  pod 'SwiftLint'
 end
