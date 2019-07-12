@@ -14,7 +14,7 @@ import CoreLocation
 
 extension ViewController {
     func occasionally() {
-    Alamofire.request("https://samples.openweathermap.org/data/2.5/forecast/daily?lat=\(lat)&lon=\(long)&cnt=10&appid=f23e9fefec26a337e0a58ad0502bed89")
+    Alamofire.request("https://samples.openweathermap.org/data/2.5/forecast/daily?lat=\(lat)&lon=\(long)&cnt=10&appid=\(apiKey)")
         .responseJSON { response in
             if let responseStr = response.result.value {
                 let jsonResponse = JSON(responseStr)
@@ -34,8 +34,7 @@ extension ViewController {
                     let jsonWeatherDays = jsonTemp["weather"].array![0]
                     let iconNameDays = jsonWeatherDays["icon"].stringValue
                     let mainImageDays = UIImage(named: iconNameDays)
-                    self.days.append(Days.init(day: self.convertUTC(dateToConvert: localDate),
-                    tampmax: tampmax, tampmin: tampmin, daysImg: mainImageDays))
+                    self.days.append(Days.init(day: self.convertUTC(dateToConvert: localDate), tampmax: tampmax, tampmin: tampmin, daysImg: mainImageDays))
                 }
             }
         }

@@ -22,7 +22,7 @@
     }
 
     class SearchBarViewController: UIViewController, UISearchBarDelegate, UISearchResultsUpdating {
-        @IBOutlet weak var detailTextLabel: UILabel!
+        
         var tableViewController = TableViewController()
         var jsonSearch = [Search]()
         var people = [City]()

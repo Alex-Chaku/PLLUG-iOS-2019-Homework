@@ -24,7 +24,7 @@
         var long = Double()
         
          var apiKey: String {
-           return "f23e9fefec26a337e0a58ad0502bed89"
+           return "94f2badf85210574354e4c6af49a382b"
         }
         var lat = Double()
         
@@ -68,7 +68,7 @@
                     }
         //MARK: - TABLE VIEW
         override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return  posts.count
+            return  posts.count 
         }
         override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")

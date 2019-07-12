@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 extension ViewController {
+    
+    
     func convertUTC(dateToConvert: String) -> String {
         let format = DateFormatter()
         format.dateFormat =  "MMM d, yyyy 'at' HH:mm:ss 'AM'"
@@ -17,8 +19,10 @@ extension ViewController {
         format.timeZone = TimeZone.current
         format.dateFormat = "MMM d"
         let localDate = format.string(from: convertedDate!)
+        daysTemp = localDate
         return localDate
     }
+
     func convertUTCDate(dateToConvert: String) -> String {
         let format = DateFormatter()
         format.dateFormat =  "yyyy-MM-dd HH:mm:ss "

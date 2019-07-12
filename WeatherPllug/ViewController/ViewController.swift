@@ -25,13 +25,13 @@
         }
 
         class ViewController: UIViewController {
-            @IBOutlet weak var collectionView: UICollectionView!
-            @IBOutlet weak var tbTableView: UITableView!
-            @IBOutlet weak var tableViewDays: UITableView!
+           
+            
             @IBOutlet weak var tableView: UITableView!
-            @IBOutlet weak var daystableView: UITableView!
+           
             var days = [Days]()
             var hour = String()
+            var daysTemp = String()
             var jsonName = String()
             var templabel = String()
             var jsonDescription = String()
@@ -44,9 +44,13 @@
             var mainTableViewCell = MainTableViewCell()
             @IBOutlet weak var LabelLocation: UILabel!
             @IBOutlet weak var LabelDecription: UILabel!
-            @IBOutlet weak var LabelTemp: UILabel!
-            @IBOutlet weak var LabelTempMax: UILabel!
-            @IBOutlet weak var LabelTempMin: UILabel!
+            
+            
+            @IBAction func watchButtonTapped(_ sender: Any) {
+                showSafariVC(for: "https://weather.com/")
+            }
+            
+            
 
             var change = Int()
             var activityIndicator: NVActivityIndicatorView!
@@ -63,6 +67,7 @@
                hourlyWeather()
                occasionally ()
             }
+         
         }
 
         extension ViewController: UITableViewDataSource, UITableViewDelegate {
