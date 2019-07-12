@@ -20,3 +20,8 @@ In order to submit your homework for review you must:
 5. In case of the rejection, you must fix the discussed issues and commit to the same branch. **DO NOT CREATE a separate pull request.** 
 6. In case of approval, your branch is merged into the corresponding main homework branch
 ## Happy coding!
+
+
+## H/w #2 "Library 🌤⛈"
+1. Base branch for this H/w is `hw-weather`
+2. Merge to base branch is avalible only through PR flow.
